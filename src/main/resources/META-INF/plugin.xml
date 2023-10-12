@@ -1,0 +1,21 @@
+<idea-plugin url="https://github.com/hurricup/intellij-perf-viewer">
+    <id>org.hurricup.profiler.perf</id>
+    <name>Perf Snapshots Viewer</name>
+    <vendor>Alexandr Evstigneev</vendor>
+    <category>Plugin Development</category>
+
+    <dependencies>
+        <module name="intellij.profiler.common"/>
+        <plugin id="com.intellij.modules.lang"/>
+        <plugin id="com.intellij.modules.ultimate"/>
+    </dependencies>
+
+    <!-- Extensions -->
+    <extensions defaultExtensionNs="com.intellij">
+        <profiler.api.ProfilerDumpParserProvider implementation="org.hurricup.profiler.perf.PerfScriptProfilerParserProvider"/>
+    </extensions>
+
+    <!-- Component's actions -->
+    <actions>
+    </actions>
+</idea-plugin>
