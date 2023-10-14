@@ -63,7 +63,6 @@ class PerfScriptProfilerParser : LineByLineParser(), ProfilerDumpFileParser {
 
   private var myBadLines: Long = 0
   private var myCurrentThreadState: PerfThreadState? = null
-  private val myCurrentState: MutableMap<String, PerfThreadState> = mutableMapOf();
 
   @NlsSafe
   private var myError: String? = null
@@ -83,14 +82,7 @@ class PerfScriptProfilerParser : LineByLineParser(), ProfilerDumpFileParser {
       if (myCurrentThreadState == null) {
         return
       }
-      val nativeId = myCurrentThreadState!!.threadInfo.nativeId
-      val previousThreadState = myCurrentThreadState?.previousState()
-      if (previousThreadState != null) {
-        val frameValue = myCurrentThreadState!!.time - previousThreadState.time
-        myCallTreeBuilder.addStack(previousThreadState.threadInfo, previousThreadState.stack.reversed(),
-                                   Math.min(Math.max(frameValue, 1), 10_000))
-      }
-      myCurrentState.put(nativeId, myCurrentThreadState!!)
+      myCallTreeBuilder.addStack(myCurrentThreadState!!.threadInfo, myCurrentThreadState!!.stack.reversed(), 1)
       myCurrentThreadState = null
       return
     }
@@ -175,7 +167,6 @@ class PerfScriptProfilerParser : LineByLineParser(), ProfilerDumpFileParser {
 
   inner class PerfThreadState(val threadInfo: ThreadInfo, val time: Long) {
     val stack: MutableList<PerfStackFrameElement> = mutableListOf()
-    fun previousState(): PerfThreadState? = myCurrentState[threadInfo.nativeId]
   }
 }
 
